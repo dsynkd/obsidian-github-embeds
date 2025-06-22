@@ -36,6 +36,7 @@ export class FileEmbed extends ExpandableEmbed {
 		const { owner, repo, ref } = this.file;
 
 		const prefix = container.createEl('div', styles.prefix);
+		prefix.addClass('github-embed-heading-prefix')
 
 		const repoLink = `${owner}/${repo}`;
 		prefix.createEl('a', {

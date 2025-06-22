@@ -87,7 +87,9 @@ export abstract class ExpandableEmbed extends EmbedComponent {
 			new Shard(this.containerEl, this.settings, 'details', { cls: [styles.embed, this.rootClass] }),
 		);
 
+		this._details.element.addClass('github-embed-details');
 		this._summary = this._details.createShard('summary', styles.summary);
+		this._summary.element.addClass('github-embed-summary');
 		this._content = this._details.createShard('div', styles.content);
 
 		this.onReload();
