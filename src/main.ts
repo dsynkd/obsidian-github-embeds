@@ -52,6 +52,7 @@ export default class GithubEmbedsPlugin extends SettingsProvider {
 			await this.createIssueEmbed(link.href, createContainer());
 		} else if (Client.isFileUrl(link.href)) {
 			await this.createFileEmbed(link.href, createContainer());
+			link.hide();
 		}
 	}
 
