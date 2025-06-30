@@ -10,12 +10,16 @@ export class FileEmbed extends ExpandableEmbed {
 		return styles.embed;
 	}
 
+	private readonly hideHeading: boolean;
+
 	constructor(
 		containerEl: HTMLElement,
 		private readonly file: FileSnippet,
 		settings: SettingsProvider,
+		hideHeading: boolean = false
 	) {
-		super(containerEl, settings);
+		super(containerEl, settings, hideHeading);
+		this.hideHeading = hideHeading;
 	}
 
 	protected onSettingsChange(prev: Settings | null, curr: Settings) {

@@ -38,14 +38,20 @@ export default class GithubEmbedsPlugin extends SettingsProvider {
 		// Custom codeblock: github-embed
 		this.registerMarkdownCodeBlockProcessor('github-embed', async (source, el, ctx) => {
 			// Parse the codeblock for a line like: URL: <the-url>
-			const urlLine = source.split('\n').find(line => line.trim().toLowerCase().startsWith('url:'));
+			const sourceSplit = source.split('\n')
+			const urlLine = sourceSplit.find(line => line.trim().toLowerCase().startsWith('url:'));
 			const url = urlLine ? urlLine.split(':').slice(1).join(':').trim() : '';
+
+			// Parse for hideHeading: true
+			const hideHeadingLine = sourceSplit.find(line => line.trim().toLowerCase().startsWith('hideheading:'));
+			const hideHeading = hideHeadingLine ? hideHeadingLine.split(':').slice(1).join(':').trim().toLowerCase() === 'true' : false;
+
 			const createContainer = () => new EmbedContainer(el.createEl('p', styles.embedContainer), ctx);
 
 			if (Client.isIssueUrl(url)) {
 				await this.createIssueEmbed(url, createContainer());
 			} else if (Client.isFileUrl(url)) {
-				await this.createFileEmbed(url, createContainer());
+				await this.createFileEmbed(url, createContainer(), hideHeading);
 			} else {
 				createContainer().setChild((el) => new ErrorEmbed(el, "Invalid URL."));
 			}
@@ -71,7 +77,7 @@ export default class GithubEmbedsPlugin extends SettingsProvider {
 		}
 	}
 
-	private async createFileEmbed(fileUrl: FileUrl, container: EmbedContainer) {
+	private async createFileEmbed(fileUrl: FileUrl, container: EmbedContainer, hideHeading: boolean = false) {
 		const tryLoad = async () => {
 			container.setChild((el) => new LoadingEmbed(el));
 
@@ -82,7 +88,7 @@ export default class GithubEmbedsPlugin extends SettingsProvider {
 
 			try {
 				const file = await this.client.fetchFile(fileUrl);
-				container.setChild((el) => new FileEmbed(el, file, this));
+				container.setChild((el) => new FileEmbed(el, file, this, hideHeading));
 			} catch (error) {
 				container.setChild((el) => new ErrorEmbed(el, error, tryLoad));
 				return;
