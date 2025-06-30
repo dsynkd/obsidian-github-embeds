@@ -35,7 +35,7 @@ export default class GithubEmbedsPlugin extends SettingsProvider {
 			// Parse the codeblock for a line like: URL: <the-url>
 			const sourceSplit = source.split('\n')
 			const urlLine = sourceSplit.find(line => line.trim().toLowerCase().startsWith('url:'));
-			const url = urlLine ? urlLine.split(':').slice(1).join(':').trim() : '';
+			const url = urlLine ? urlLine.split(':').slice(1).join(':').trim() : source;
 
 			// Parse for hideHeading: true
 			const hideHeadingLine = sourceSplit.find(line => line.trim().toLowerCase().startsWith('hideheading:'));
