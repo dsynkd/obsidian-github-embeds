@@ -30,11 +30,6 @@ export default class GithubEmbedsPlugin extends SettingsProvider {
 			{ immediate: true },
 		);
 
-		this.registerMarkdownPostProcessor(async (el, ctx) => {
-			const links = Array.from(el.querySelectorAll('a'));
-			await Promise.all(links.map((link) => this.processLink(link, ctx)));
-		});
-
 		// Custom codeblock: github-embed
 		this.registerMarkdownCodeBlockProcessor('github-embed', async (source, el, ctx) => {
 			// Parse the codeblock for a line like: URL: <the-url>
@@ -44,7 +39,7 @@ export default class GithubEmbedsPlugin extends SettingsProvider {
 
 			// Parse for hideHeading: true
 			const hideHeadingLine = sourceSplit.find(line => line.trim().toLowerCase().startsWith('hideheading:'));
-			const hideHeading = hideHeadingLine ? hideHeadingLine.split(':').slice(1).join(':').trim().toLowerCase() === 'true' : false;
+			const hideHeading = hideHeadingLine ? hideHeadingLine.split(':').slice(1).join(':').trim().toLowerCase() === 'true' : this.settings.hideFileEmbedHeading;
 
 			const createContainer = () => new EmbedContainer(el.createEl('p', styles.embedContainer), ctx);
 
@@ -56,25 +51,6 @@ export default class GithubEmbedsPlugin extends SettingsProvider {
 				createContainer().setChild((el) => new ErrorEmbed(el, "Invalid URL."));
 			}
 		});
-	}
-
-	private async processLink(link: HTMLAnchorElement, ctx: MarkdownPostProcessorContext) {
-		const parent =
-			link.parentElement?.tagName === 'TD' || link.parentElement?.tagName === 'LI'
-				? link.parentElement
-				: link.parentElement?.parentElement;
-
-		if (!parent) {
-			return;
-		}
-
-		const createContainer = () => new EmbedContainer(parent.createEl('p', styles.embedContainer), ctx);
-
-		if (Client.isIssueUrl(link.href)) {
-			await this.createIssueEmbed(link.href, createContainer());
-		} else if (Client.isFileUrl(link.href)) {
-			await this.createFileEmbed(link.href, createContainer());
-		}
 	}
 
 	private async createFileEmbed(fileUrl: FileUrl, container: EmbedContainer, hideHeading: boolean = false) {
