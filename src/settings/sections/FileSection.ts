@@ -10,20 +10,6 @@ export class FileSection extends BaseSection {
 		const { containerEl, plugin } = this;
 
 		new ResettableSetting(containerEl)
-			.setName('Enable')
-			.setDesc('Enable the embedding of GitHub files.')
-			.addResettableToggle(
-				(toggle) => {
-					toggle.setValue(plugin.settings.embedFiles).onChange(async (value) => {
-						await plugin.modifySettings((settings) => {
-							settings.embedFiles = value;
-						});
-					});
-				},
-				() => DefaultSettings.embedFiles,
-			);
-
-		new ResettableSetting(containerEl)
 			.setName('Snippet preview threshold')
 			.setDesc('The maximum number of lines a file snippet can have before it defaults to closed.')
 			.addResettableText(

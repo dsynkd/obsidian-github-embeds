@@ -12,20 +12,6 @@ export class IssueSection extends BaseSection {
 		const { containerEl, plugin } = this;
 
 		new ResettableSetting(containerEl)
-			.setName('Enable')
-			.setDesc('Enable the embedding of issues and pull requests.')
-			.addResettableToggle(
-				(toggle) => {
-					toggle.setValue(plugin.settings.embedIssues).onChange(async (value) => {
-						await plugin.modifySettings((settings) => {
-							settings.embedIssues = value;
-						});
-					});
-				},
-				() => DefaultSettings.embedIssues,
-			);
-
-		new ResettableSetting(containerEl)
 			.setName('Label display')
 			.setDesc('Determines how labels are displayed in embeds.')
 			.addResettableDropdown(

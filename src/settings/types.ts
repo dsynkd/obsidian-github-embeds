@@ -1,7 +1,5 @@
 export interface Settings {
 	readonly githubToken?: string;
-	readonly embedIssues: boolean;
-	readonly embedFiles: boolean;
 	readonly labelDisplay: DisplayLocation;
 	readonly autoOpenThreshold: number;
 	readonly dateFormat: string;

@@ -73,10 +73,7 @@ export default class GithubEmbedsPlugin extends SettingsProvider {
 
 		this.onSettingsChanged(
 			(prev, curr) => {
-				if (!curr.embedFiles) {
-					// Remove embeds
-					container.empty();
-				} else if (!prev?.embedFiles || prev?.githubToken !== curr.githubToken) {
+				if (prev?.githubToken !== curr.githubToken) {
 					// Add embeds
 					return tryLoad();
 				}
@@ -122,10 +119,7 @@ export default class GithubEmbedsPlugin extends SettingsProvider {
 
 		this.onSettingsChanged(
 			(prev, curr) => {
-				if (!curr.embedIssues) {
-					// Remove embeds
-					container.empty();
-				} else if (!prev?.embedIssues || prev?.githubToken !== curr.githubToken) {
+				if (prev?.githubToken !== curr.githubToken) {
 					// Add embeds
 					return tryLoad();
 				}
