@@ -34,6 +34,22 @@ export default class GithubEmbedsPlugin extends SettingsProvider {
 			const links = Array.from(el.querySelectorAll('a'));
 			await Promise.all(links.map((link) => this.processLink(link, ctx)));
 		});
+
+		// Custom codeblock: github-embed
+		this.registerMarkdownCodeBlockProcessor('github-embed', async (source, el, ctx) => {
+			// Parse the codeblock for a line like: URL: <the-url>
+			const urlLine = source.split('\n').find(line => line.trim().toLowerCase().startsWith('url:'));
+			const url = urlLine ? urlLine.split(':').slice(1).join(':').trim() : '';
+			const createContainer = () => new EmbedContainer(el.createEl('p', styles.embedContainer), ctx);
+
+			if (Client.isIssueUrl(url)) {
+				await this.createIssueEmbed(url, createContainer());
+			} else if (Client.isFileUrl(url)) {
+				await this.createFileEmbed(url, createContainer());
+			} else {
+				el.createEl('div', { text: 'Invalid URL.' });
+			}
+		});
 	}
 
 	private async processLink(link: HTMLAnchorElement, ctx: MarkdownPostProcessorContext) {
@@ -50,9 +66,8 @@ export default class GithubEmbedsPlugin extends SettingsProvider {
 
 		if (Client.isIssueUrl(link.href)) {
 			await this.createIssueEmbed(link.href, createContainer());
-		} else if (Client.isFileUrl(link.href) && link.previousSibling?.textContent == '!') {
+		} else if (Client.isFileUrl(link.href)) {
 			await this.createFileEmbed(link.href, createContainer());
-			link.parentElement?.hide();
 		}
 	}
 
