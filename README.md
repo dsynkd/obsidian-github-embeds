@@ -1,8 +1,8 @@
 # Obsidian GitHub Embeds
 
-> Embed GitHub issues, PRs, and code snippets directly in Obsidian.
+Embed GitHub issues, PRs, and code snippets directly in Obsidian.
 
-<img alt="Screenshot of pull request embed" src="./screenshots/pr-screenshot.png" width="50%" /><img alt="Screenshot of file embed" src="./screenshots/file-screenshot.png" width="50%" />
+https://github.com/user-attachments/assets/cb2baf55-a379-4b89-b252-0ef42a982ef9
 
 ## Usage
 1. Create a GitHub Personal Access Token [here](https://github.com/settings/tokens?type=beta) and paste it in the Settings.
