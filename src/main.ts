@@ -47,7 +47,7 @@ export default class GithubEmbedsPlugin extends SettingsProvider {
 			} else if (Client.isFileUrl(url)) {
 				await this.createFileEmbed(url, createContainer());
 			} else {
-				el.createEl('div', { text: 'Invalid URL.' });
+				createContainer().setChild((el) => new ErrorEmbed(el, "Invalid URL."));
 			}
 		});
 	}
