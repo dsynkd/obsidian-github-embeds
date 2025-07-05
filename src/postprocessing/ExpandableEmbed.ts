@@ -21,7 +21,7 @@ export abstract class ExpandableEmbed extends EmbedComponent {
 	protected constructor(
 		containerEl: HTMLElement,
 		protected readonly settings: SettingsProvider,
-		hideHeading: boolean
+		hideHeading: boolean = false
 	) {
 		super(containerEl);
 		this.hideHeading = hideHeading
