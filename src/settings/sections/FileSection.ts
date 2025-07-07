@@ -41,17 +41,17 @@ export class FileSection extends BaseSection {
 			);
 
 		new ResettableSetting(containerEl)
-			.setName('Hide File Embed Heading')
-			.setDesc('When enabled, the file heading (repo, branch, file path, etc.) will not be displayed in file embeds.')
+			.setName('Show File Embed Heading')
+			.setDesc('When enabled, the file heading (repo, branch, file path, etc.) will be displayed in file embeds.')
 			.addResettableToggle(
 				(toggle) => {
-					toggle.setValue(plugin.settings.hideFileEmbedHeading).onChange(async (value) => {
+					toggle.setValue(plugin.settings.showHeading).onChange(async (value) => {
 						await plugin.modifySettings((settings) => {
-							settings.hideFileEmbedHeading = value;
+							settings.showHeading = value;
 						});
 					});
 				},
-				() => DefaultSettings.hideFileEmbedHeading,
+				() => DefaultSettings.showHeading,
 			);
 	}
 }

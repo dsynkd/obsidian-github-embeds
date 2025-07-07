@@ -4,7 +4,7 @@ export interface Settings {
 	readonly autoOpenThreshold: number;
 	readonly dateFormat: string;
 	readonly showTotalComments: boolean;
-	readonly hideFileEmbedHeading: boolean;
+	readonly showHeading: boolean;
 }
 
 export type DisplayLocation = 'preview' | 'inside' | 'none';

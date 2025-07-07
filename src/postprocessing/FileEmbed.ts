@@ -14,9 +14,9 @@ export class FileEmbed extends ExpandableEmbed {
 		containerEl: HTMLElement,
 		private readonly file: FileSnippet,
 		settings: SettingsProvider,
-		hideHeading: boolean = false
+		showHeading: boolean = true
 	) {
-		super(containerEl, settings, hideHeading);
+		super(containerEl, settings, showHeading);
 	}
 
 	protected onSettingsChange(prev: Settings | null, curr: Settings) {

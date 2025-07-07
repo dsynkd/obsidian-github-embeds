@@ -16,15 +16,15 @@ export abstract class ExpandableEmbed extends EmbedComponent {
 	private _summary: Shard;
 	private _content: Shard;
 
-	private readonly hideHeading: boolean;
+	private readonly showHeading: boolean;
 
 	protected constructor(
 		containerEl: HTMLElement,
 		protected readonly settings: SettingsProvider,
-		hideHeading: boolean = false
+		showHeading: boolean = true
 	) {
 		super(containerEl);
-		this.hideHeading = hideHeading
+		this.showHeading = showHeading
 	}
 
 	onload() {
@@ -88,7 +88,7 @@ export abstract class ExpandableEmbed extends EmbedComponent {
 
 	private reload() {
 		const detailsClasses = [styles.embed, this.rootClass]
-		if(this.hideHeading) {
+		if(!this.showHeading) {
 			detailsClasses.push(styles.hide)
 		}
 		this._details = this.addChild(
@@ -98,14 +98,14 @@ export abstract class ExpandableEmbed extends EmbedComponent {
 		this._details.element.addClass('github-embed-details');
 		this._summary = this._details.createShard('summary', styles.summary);
 		this._summary.element.addClass('github-embed-summary');
-		if(this.hideHeading) {
+
+		if(this.showHeading) {
+			this._content = this._details.createShard('div', styles.content);
+		} else {
 			this._content = this.addChild(
 				new Shard(this.containerEl, this.settings, 'div', { cls: [styles.content, this.rootClass] })
 			);
-		} else {
-			this._content = this._details.createShard('div', styles.content);
 		}
-		
 
 		this.onReload();
 		this.reloadSummary();

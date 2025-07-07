@@ -37,23 +37,33 @@ export default class GithubEmbedsPlugin extends SettingsProvider {
 			const urlLine = sourceSplit.find(line => line.trim().toLowerCase().startsWith('url:'));
 			const url = urlLine ? urlLine.split(':').slice(1).join(':').trim() : source;
 
-			// Parse for hideHeading: true
-			const hideHeadingLine = sourceSplit.find(line => line.trim().toLowerCase().startsWith('hideheading:'));
-			const hideHeading = hideHeadingLine ? hideHeadingLine.split(':').slice(1).join(':').trim().toLowerCase() === 'true' : this.settings.hideFileEmbedHeading;
-
 			const createContainer = () => new EmbedContainer(el.createEl('p', styles.embedContainer), ctx);
+
+			let showHeading = this.settings.showHeading;
+			const showHeadingLine = sourceSplit.find(line => line.trim().startsWith('showHeading:'));
+			if(showHeadingLine !== undefined) {
+				const showHeadingValue = showHeadingLine.split(':')[1].trim().toLowerCase()
+				if(showHeadingValue == 'true') {
+					showHeading = true;
+				} else if(showHeadingValue == 'false') {
+					showHeading = false;
+				} else {
+					createContainer().setChild((el) => new ErrorEmbed(el, ": Invalid showHeading value."));
+					return;
+				}
+			}
 
 			if (Client.isIssueUrl(url)) {
 				await this.createIssueEmbed(url, createContainer());
 			} else if (Client.isFileUrl(url)) {
-				await this.createFileEmbed(url, createContainer(), hideHeading);
+				await this.createFileEmbed(url, createContainer(), showHeading);
 			} else {
-				createContainer().setChild((el) => new ErrorEmbed(el, "Invalid URL."));
+				createContainer().setChild((el) => new ErrorEmbed(el, ": Invalid URL."));
 			}
 		});
 	}
 
-	private async createFileEmbed(fileUrl: FileUrl, container: EmbedContainer, hideHeading: boolean = false) {
+	private async createFileEmbed(fileUrl: FileUrl, container: EmbedContainer, showHeading: boolean = true) {
 		const tryLoad = async () => {
 			container.setChild((el) => new LoadingEmbed(el));
 
@@ -64,7 +74,7 @@ export default class GithubEmbedsPlugin extends SettingsProvider {
 
 			try {
 				const file = await this.client.fetchFile(fileUrl);
-				container.setChild((el) => new FileEmbed(el, file, this, hideHeading));
+				container.setChild((el) => new FileEmbed(el, file, this, showHeading));
 			} catch (error) {
 				container.setChild((el) => new ErrorEmbed(el, error, tryLoad));
 				return;
