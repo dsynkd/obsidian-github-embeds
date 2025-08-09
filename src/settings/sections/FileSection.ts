@@ -9,6 +9,8 @@ export class FileSection extends BaseSection {
 	protected onload(): void {
 		const { containerEl, plugin } = this;
 
+		let thresholdSetting: ResettableSetting | null = null;
+
 		new ResettableSetting(containerEl)
 			.setName('Enable')
 			.setDesc('Enable the embedding of GitHub files.')
@@ -24,6 +26,23 @@ export class FileSection extends BaseSection {
 			);
 
 		new ResettableSetting(containerEl)
+			.setName('Show File Embed Heading')
+			.addResettableToggle(
+				(toggle) => {
+					toggle.setValue(plugin.settings.showHeading).onChange(async (value) => {
+						await plugin.modifySettings((settings) => {
+							settings.showHeading = value;
+						});
+						// Show/hide the threshold setting based on the toggle
+						if (thresholdSetting) {
+							thresholdSetting.settingEl.style.display = value ? '' : 'none';
+						}
+					});
+				},
+				() => DefaultSettings.showHeading,
+			);
+
+		thresholdSetting = new ResettableSetting(containerEl)
 			.setName('Snippet preview threshold')
 			.setDesc('The maximum number of lines a file snippet can have before it defaults to closed.')
 			.addResettableText(
@@ -53,5 +72,8 @@ export class FileSection extends BaseSection {
 				},
 				() => DefaultSettings.autoOpenThreshold.toString(),
 			);
+
+		// Set initial visibility of the threshold setting
+		thresholdSetting.settingEl.style.display = plugin.settings.showHeading ? '' : 'none';
 	}
 }

@@ -14,8 +14,9 @@ export class FileEmbed extends ExpandableEmbed {
 		containerEl: HTMLElement,
 		private readonly file: FileSnippet,
 		settings: SettingsProvider,
+		showHeading: boolean = true
 	) {
-		super(containerEl, settings);
+		super(containerEl, settings, showHeading);
 	}
 
 	protected onSettingsChange(prev: Settings | null, curr: Settings) {
@@ -36,6 +37,7 @@ export class FileEmbed extends ExpandableEmbed {
 		const { owner, repo, ref } = this.file;
 
 		const prefix = container.createEl('div', styles.prefix);
+		prefix.addClass('github-embed-heading-prefix')
 
 		const repoLink = `${owner}/${repo}`;
 		prefix.createEl('a', {
