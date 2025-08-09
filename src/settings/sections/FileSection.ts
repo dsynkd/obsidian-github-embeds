@@ -12,20 +12,6 @@ export class FileSection extends BaseSection {
 		let thresholdSetting: ResettableSetting | null = null;
 
 		new ResettableSetting(containerEl)
-			.setName('Enable')
-			.setDesc('Enable the embedding of GitHub files.')
-			.addResettableToggle(
-				(toggle) => {
-					toggle.setValue(plugin.settings.embedFiles).onChange(async (value) => {
-						await plugin.modifySettings((settings) => {
-							settings.embedFiles = value;
-						});
-					});
-				},
-				() => DefaultSettings.embedFiles,
-			);
-
-		new ResettableSetting(containerEl)
 			.setName('Show File Embed Heading')
 			.addResettableToggle(
 				(toggle) => {

@@ -16,22 +16,9 @@ export class GithubSection extends BaseSection {
 		const desc = new DocumentFragment();
 		desc.append(
 			sanitizeHTMLToDom(`
-			Used to authenticate with the GitHub API. Create one <a href="https://github.com/settings/tokens?type=beta">here</a>.
-			<br/>
-			<br/>
-			In order for this plugin to work properly with private repositories, the token must have at least the following permissions:
-			<ul>
-				<li class="${styles.perm}">
-					<span class="${styles.permTitle}">Contents</span> <span class="${styles.permReadonly}">(Read-only)</span>
-				</li>
-				<li class="${styles.perm}">
-					<span class="${styles.permTitle}">Issues</span> <span class="${styles.permReadonly}">(Read-only)</span>
-				</li>
-				<li class="${styles.perm}">
-					<span class="${styles.permTitle}">Pull requests</span> <span class="${styles.permReadonly}">(Read-only)</span>
-				</li>
-			</ul>
-		`),
+				Used to authenticate with the GitHub API.
+				Create one <a href="https://github.com/settings/tokens?type=beta">here</a>.
+			`),
 		);
 
 		let tokenInput: HTMLInputElement | null = null;
