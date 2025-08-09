@@ -8,4 +8,5 @@ export const DefaultSettings: Settings = {
 	autoOpenThreshold: 10,
 	dateFormat: 'MMMM D, YYYY',
 	showTotalComments: true,
+	showHeading: true,
 };

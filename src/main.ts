@@ -30,32 +30,40 @@ export default class GithubEmbedsPlugin extends SettingsProvider {
 			{ immediate: true },
 		);
 
-		this.registerMarkdownPostProcessor(async (el, ctx) => {
-			const links = Array.from(el.querySelectorAll('a'));
-			await Promise.all(links.map((link) => this.processLink(link, ctx)));
+		// Custom codeblock: github-embed
+		this.registerMarkdownCodeBlockProcessor('github-embed', async (source, el, ctx) => {
+			// Parse the codeblock for a line like: URL: <the-url>
+			const sourceSplit = source.split('\n')
+			const urlLine = sourceSplit.find(line => line.trim().toLowerCase().startsWith('url:'));
+			const url = urlLine ? urlLine.split(':').slice(1).join(':').trim() : source;
+
+			const createContainer = () => new EmbedContainer(el.createEl('p', styles.embedContainer), ctx);
+
+			let showHeading = this.settings.showHeading;
+			const showHeadingLine = sourceSplit.find(line => line.trim().startsWith('showHeading:'));
+			if(showHeadingLine !== undefined) {
+				const showHeadingValue = showHeadingLine.split(':')[1].trim().toLowerCase()
+				if(showHeadingValue == 'true') {
+					showHeading = true;
+				} else if(showHeadingValue == 'false') {
+					showHeading = false;
+				} else {
+					createContainer().setChild((el) => new ErrorEmbed(el, ": Invalid showHeading value."));
+					return;
+				}
+			}
+
+			if (Client.isIssueUrl(url)) {
+				await this.createIssueEmbed(url, createContainer());
+			} else if (Client.isFileUrl(url)) {
+				await this.createFileEmbed(url, createContainer(), showHeading);
+			} else {
+				createContainer().setChild((el) => new ErrorEmbed(el, ": Invalid URL."));
+			}
 		});
 	}
 
-	private async processLink(link: HTMLAnchorElement, ctx: MarkdownPostProcessorContext) {
-		const parent =
-			link.parentElement?.tagName === 'TD' || link.parentElement?.tagName === 'LI'
-				? link.parentElement
-				: link.parentElement?.parentElement;
-
-		if (!parent) {
-			return;
-		}
-
-		const createContainer = () => new EmbedContainer(parent.createEl('p', styles.embedContainer), ctx);
-
-		if (Client.isIssueUrl(link.href)) {
-			await this.createIssueEmbed(link.href, createContainer());
-		} else if (Client.isFileUrl(link.href)) {
-			await this.createFileEmbed(link.href, createContainer());
-		}
-	}
-
-	private async createFileEmbed(fileUrl: FileUrl, container: EmbedContainer) {
+	private async createFileEmbed(fileUrl: FileUrl, container: EmbedContainer, showHeading: boolean = true) {
 		const tryLoad = async () => {
 			container.setChild((el) => new LoadingEmbed(el));
 
@@ -66,7 +74,7 @@ export default class GithubEmbedsPlugin extends SettingsProvider {
 
 			try {
 				const file = await this.client.fetchFile(fileUrl);
-				container.setChild((el) => new FileEmbed(el, file, this));
+				container.setChild((el) => new FileEmbed(el, file, this, showHeading));
 			} catch (error) {
 				container.setChild((el) => new ErrorEmbed(el, error, tryLoad));
 				return;
@@ -75,10 +83,7 @@ export default class GithubEmbedsPlugin extends SettingsProvider {
 
 		this.onSettingsChanged(
 			(prev, curr) => {
-				if (!curr.embedFiles) {
-					// Remove embeds
-					container.empty();
-				} else if (!prev?.embedFiles || prev?.githubToken !== curr.githubToken) {
+				if (prev?.githubToken !== curr.githubToken) {
 					// Add embeds
 					return tryLoad();
 				}
@@ -124,10 +129,7 @@ export default class GithubEmbedsPlugin extends SettingsProvider {
 
 		this.onSettingsChanged(
 			(prev, curr) => {
-				if (!curr.embedIssues) {
-					// Remove embeds
-					container.empty();
-				} else if (!prev?.embedIssues || prev?.githubToken !== curr.githubToken) {
+				if (prev?.githubToken !== curr.githubToken) {
 					// Add embeds
 					return tryLoad();
 				}
