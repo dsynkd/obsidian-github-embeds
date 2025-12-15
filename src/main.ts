@@ -110,7 +110,8 @@ export default class GithubEmbedsPlugin extends SettingsProvider {
 				}
 
 				if (errors) {
-					container.setChild((el) => new ErrorEmbed(el, errors, tryLoad));
+					const errorMessages = errors.map((e) => e.message || JSON.stringify(e));
+					container.setChild((el) => new ErrorEmbed(el, errorMessages, tryLoad));
 					return;
 				}
 
