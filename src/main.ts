@@ -1,4 +1,3 @@
-import { MarkdownPostProcessorContext } from 'obsidian';
 import { Client } from './client';
 import { IssueEmbed } from './postprocessing/IssueEmbed';
 import { GitHubEmbedsSettingsTab } from './settings/GitHubEmbedsSettingsTab';

@@ -1,6 +1,5 @@
 import { sanitizeHTMLToDom, Setting } from 'obsidian';
 import { BaseSection } from './BaseSection';
-import styles from './GithubSection.module.scss';
 
 export class GithubSection extends BaseSection {
 	protected title(): string | undefined {
