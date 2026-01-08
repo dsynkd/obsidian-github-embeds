@@ -1,6 +1,6 @@
 import { App, PluginSettingTab } from 'obsidian';
 import GithubEmbedsPlugin from '../main';
-import { DisclaimerSection, FileSection, GithubSection, IssueSection } from './sections';
+import { FileSection, GithubSection, IssueSection } from './sections';
 
 export class GitHubEmbedsSettingsTab extends PluginSettingTab {
 	constructor(
@@ -15,7 +15,6 @@ export class GitHubEmbedsSettingsTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		new DisclaimerSection(this);
 		new GithubSection(this);
 		new FileSection(this);
 		new IssueSection(this);

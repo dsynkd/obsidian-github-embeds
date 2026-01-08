@@ -3,62 +3,46 @@ import { BaseSection } from './BaseSection';
 
 export class GithubSection extends BaseSection {
 	protected title(): string | undefined {
-		return 'GitHub';
+		return undefined;
 	}
 	protected onload() {
-		this.createTokenSetting();
+		this.createSecretIdSetting();
 	}
 
-	private createTokenSetting() {
+	private createSecretIdSetting() {
 		const { containerEl, plugin } = this;
 
 		const desc = new DocumentFragment();
 		desc.append(
 			sanitizeHTMLToDom(`
-				Used to authenticate with the GitHub API.
-				Create one <a href="https://github.com/settings/tokens?type=beta">here</a>.
+				Select the secret ID that contains your GitHub personal access token.
+				Create a token <a href="https://github.com/settings/tokens?type=beta">here</a>.
+				You can manage secrets using Obsidian's Keychain settings.
 			`),
 		);
 
-		let tokenInput: HTMLInputElement | null = null;
 		new Setting(containerEl)
-			.setName('GitHub personal access token')
+			.setName('GitHub Secret ID')
 			.setDesc(desc)
-			.addText((text) => {
-				tokenInput = text.inputEl;
-				text.inputEl.type = 'password';
+			.addDropdown((dropdown) => {
+				// Get available secret IDs
+				const secretIds = this.app.secretStorage.listSecrets();
+				
+				// Add an empty option
+				dropdown.addOption('', 'Select a Secret ID');
+				
+				// Add all secret IDs
+				secretIds.forEach(id => {
+					dropdown.addOption(id, id);
+				});
 
-				text.setPlaceholder('Enter your token')
-					.setValue(plugin.settings.githubToken ?? '')
+				dropdown.setValue(plugin.settings.githubSecretId ?? '')
 					.onChange(async (value) => {
-						const token = value.trim();
+						const secretId = value.trim();
 						await plugin.modifySettings((settings) => {
-							settings.githubToken = token ? token : undefined;
+							settings.githubSecretId = secretId ? secretId : undefined;
 						});
 					});
-			})
-			.addExtraButton((button) => {
-				const toggleButton = (isTokenHidden: boolean) => {
-					button
-						.setIcon(isTokenHidden ? 'eye' : 'eye-off')
-						.setTooltip(isTokenHidden ? 'Show token' : 'Hide token');
-				};
-
-				toggleButton(true);
-
-				button.onClick(() => {
-					if (!tokenInput) {
-						return;
-					}
-
-					if (tokenInput.type === 'password') {
-						tokenInput.type = 'text';
-						toggleButton(false);
-					} else {
-						tokenInput.type = 'password';
-						toggleButton(true);
-					}
-				});
 			});
 	}
 }

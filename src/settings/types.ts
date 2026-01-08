@@ -1,5 +1,5 @@
 export interface Settings {
-	readonly githubToken?: string;
+	readonly githubSecretId?: string;
 	readonly labelDisplay: DisplayLocation;
 	readonly autoOpenThreshold: number;
 	readonly dateFormat: string;

@@ -1,7 +1,7 @@
 import { Settings } from './types';
 
 export const DefaultSettings: Settings = {
-	githubToken: undefined,
+	githubSecretId: undefined,
 	labelDisplay: 'preview',
 	autoOpenThreshold: 10,
 	dateFormat: 'MMMM D, YYYY',

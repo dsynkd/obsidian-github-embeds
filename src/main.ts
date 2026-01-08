@@ -16,6 +16,14 @@ window.__DEV__ = process.env.NODE_ENV === 'development';
 export default class GithubEmbedsPlugin extends SettingsProvider {
 	private client: Client | null = null;
 
+	private async getGitHubToken(): Promise<string | null> {
+		const secretId = this.settings.githubSecretId;
+		if (!secretId) {
+			return null;
+		}
+		return this.app.secretStorage.getSecret(secretId);
+	}
+
 	async onload() {
 		await Langs.initialize(this.app, this);
 
@@ -23,8 +31,9 @@ export default class GithubEmbedsPlugin extends SettingsProvider {
 		this.addSettingTab(new GitHubEmbedsSettingsTab(this.app, this));
 
 		this.onSettingsChanged(
-			(_, settings) => {
-				this.client = settings.githubToken ? new Client(settings.githubToken) : null;
+			async (_, settings) => {
+				const token = await this.getGitHubToken();
+				this.client = token ? new Client(token) : null;
 			},
 			{ immediate: true },
 		);
@@ -66,7 +75,8 @@ export default class GithubEmbedsPlugin extends SettingsProvider {
 		const tryLoad = async () => {
 			container.setChild((el) => new LoadingEmbed(el));
 
-			if (!this.settings.githubToken || !this.client) {
+			const token = await this.getGitHubToken();
+			if (!token || !this.client) {
 				container.setChild((el) => new ErrorEmbed(el, 'missing API token', tryLoad));
 				return;
 			}
@@ -81,9 +91,11 @@ export default class GithubEmbedsPlugin extends SettingsProvider {
 		};
 
 		this.onSettingsChanged(
-			(prev, curr) => {
-				if (prev?.githubToken !== curr.githubToken) {
-					// Add embeds
+			async (prev, curr) => {
+				if (prev?.githubSecretId !== curr.githubSecretId) {
+					// Update client and reload
+					const token = await this.getGitHubToken();
+					this.client = token ? new Client(token) : null;
 					return tryLoad();
 				}
 			},
@@ -95,7 +107,8 @@ export default class GithubEmbedsPlugin extends SettingsProvider {
 		const tryLoad = async () => {
 			container.setChild((el) => new LoadingEmbed(el));
 
-			if (!this.settings.githubToken || !this.client) {
+			const token = await this.getGitHubToken();
+			if (!token || !this.client) {
 				container.setChild((el) => new ErrorEmbed(el, 'missing API token', tryLoad));
 				return;
 			}
@@ -128,9 +141,11 @@ export default class GithubEmbedsPlugin extends SettingsProvider {
 		};
 
 		this.onSettingsChanged(
-			(prev, curr) => {
-				if (prev?.githubToken !== curr.githubToken) {
-					// Add embeds
+			async (prev, curr) => {
+				if (prev?.githubSecretId !== curr.githubSecretId) {
+					// Update client and reload
+					const token = await this.getGitHubToken();
+					this.client = token ? new Client(token) : null;
 					return tryLoad();
 				}
 			},
