@@ -33,3 +33,13 @@
 	.ref-link {
 	}
 }
+
+.embed .wordWrap pre,
+.embed .wordWrap code {
+	white-space: pre-wrap !important;
+}
+
+.embed .noWordWrap pre,
+.embed .noWordWrap code {
+	white-space: pre !important;
+}

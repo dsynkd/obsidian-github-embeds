@@ -61,5 +61,19 @@ export class FileSection extends BaseSection {
 
 		// Set initial visibility of the threshold setting
 		thresholdSetting.settingEl.style.display = plugin.settings.showHeading ? '' : 'none';
+
+		new ResettableSetting(containerEl)
+			.setName('Word Wrap')
+			.setDesc('Enable word wrapping in code panels.')
+			.addResettableToggle(
+				(toggle) => {
+					toggle.setValue(plugin.settings.wordWrap).onChange(async (value) => {
+						await plugin.modifySettings((settings) => {
+							settings.wordWrap = value;
+						});
+					});
+				},
+				() => DefaultSettings.wordWrap,
+			);
 	}
 }

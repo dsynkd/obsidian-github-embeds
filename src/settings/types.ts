@@ -5,6 +5,7 @@ export interface Settings {
 	readonly dateFormat: string;
 	readonly showTotalComments: boolean;
 	readonly showHeading: boolean;
+	readonly wordWrap: boolean;
 }
 
 export type DisplayLocation = 'preview' | 'inside' | 'none';

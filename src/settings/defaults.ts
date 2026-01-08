@@ -7,4 +7,5 @@ export const DefaultSettings: Settings = {
 	dateFormat: 'MMMM D, YYYY',
 	showTotalComments: true,
 	showHeading: true,
+	wordWrap: true,
 };

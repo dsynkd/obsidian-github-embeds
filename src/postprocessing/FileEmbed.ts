@@ -6,6 +6,9 @@ import { ExpandableEmbed } from './ExpandableEmbed';
 import { Shard } from '../components/core';
 
 export class FileEmbed extends ExpandableEmbed {
+	
+	wrapper: HTMLElement
+
 	protected get rootClass(): string {
 		return styles.embed;
 	}
@@ -24,6 +27,10 @@ export class FileEmbed extends ExpandableEmbed {
 
 		if (prev?.autoOpenThreshold !== curr.autoOpenThreshold) {
 			this.tryToggle();
+		}
+
+		if (prev?.wordWrap !== curr.wordWrap) {
+			this.applyStyles();	
 		}
 	}
 
@@ -70,7 +77,16 @@ export class FileEmbed extends ExpandableEmbed {
 	protected createContent(container: Shard): void {
 		const { lang = '', snippetContent } = this.file;
 		const content = `\`\`\`${lang}\n${snippetContent}\n\`\`\``;
-		renderMarkdown(this.settings.app, content, container.element, this);
+		this.wrapper = container.createEl('div');
+		renderMarkdown(this.settings.app, content, this.wrapper, this);
+		setTimeout(() => {
+			this.applyStyles();	
+		}, 0);
+	}
+
+	protected applyStyles() {
+		this.wrapper.classList = ''
+		this.wrapper.addClass(this.settings.settings.wordWrap ? styles.wordWrap : styles.noWordWrap)
 	}
 
 	private tryToggle() {
