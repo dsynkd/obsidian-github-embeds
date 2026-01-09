@@ -10,7 +10,7 @@ import { BranchDocument, BranchQueryVariables } from '../queries/Branch.graphql'
 const issueRegex = /^https:\/\/github\.com\/([\w-]+)\/([\w.-]+)\/(?:issues|pull)\/(\d+)/i;
 // This Regex intentionally does not match branches with slashes in them.
 // @see https://regex101.com/r/1n33Oh/3
-const fileRegex = /^https:\/\/github\.com\/([\w-]+)\/([\w.-]+)\/blob\/([^/]+)\/([^#]*)(?:#L(\d+)(?:-L(\d+))?)?/i;
+const fileRegex = /^https:\/\/github\.com\/([\w-]+)\/([\w.-]+)\/blob\/([^/]+)\/([^#]*)(?:#L(\d+)(?:-L?(\d*))?)?/i;
 
 /**
  * The API client used to fetch data from GitHub.
@@ -145,7 +145,16 @@ export class Client {
 		}
 
 		const start = startLine ? parseInt(startLine) : undefined;
-		const end = endLine ? parseInt(endLine) : undefined;
+		let end: number | undefined;
+		let isToEnd = false;
+
+		if (endLine == null || endLine === "") {
+			isToEnd = true;
+			const totalLines = fullContent.split(/\n|\r\n/).length;
+			end = totalLines;
+		} else {
+			end = endLine ? parseInt(endLine) : undefined;
+		}
 
 		const snippetContent = extractLines(fullContent, start, end);
 
@@ -162,7 +171,7 @@ export class Client {
 			lines: startLine
 				? {
 						start: parseInt(startLine),
-						end: endLine ? parseInt(endLine) : undefined,
+						end: isToEnd ? -1 : (endLine ? parseInt(endLine) : undefined),
 				  }
 				: undefined,
 			lang: Langs.get(ext),

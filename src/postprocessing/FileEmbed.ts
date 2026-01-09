@@ -65,7 +65,7 @@ export class FileEmbed extends ExpandableEmbed {
 		const { path, lines, url } = this.file;
 		const link = container.createEl('a', { href: url, cls: styles.title });
 		link.createSpan({ text: path, cls: styles.linkText });
-		const linesText = lines ? `#L${lines.start}${lines.end ? `-L${lines.end}` : ''}` : '';
+		const linesText = lines ? `#L${lines.start}${lines.end === -1 ? '-' : lines.end ? `-L${lines.end}` : ''}` : '';
 		link.createSpan({ text: linesText, cls: styles.lines });
 	}
 
