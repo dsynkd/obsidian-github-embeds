@@ -13,7 +13,7 @@
 	}
 }
 
-// The following is based on GitHub's label colors, extracted from Chrome DevTools.
+/* The following is based on GitHub's label colors, extracted from Chrome DevTools. */
 .label {
 	--perceived-lightness: calc(
 		((var(--label-r) * 0.2126) + (var(--label-g) * 0.7152) + (var(--label-b) * 0.0722)) / 255

@@ -1,7 +1,11 @@
-@import '../styles';
-
 .embed {
-	@include base-embed;
+	border-width: var(--border-width);
+	border-color: var(--background-modifier-border);
+	border-style: solid;
+	border-radius: var(--radius-s);
+	padding: var(--size-4-2) var(--size-4-3);
+	overflow: hidden;
+	min-width: 200px;
 
 	padding-top: var(--size-4-4);
 	padding-bottom: var(--size-4-4);

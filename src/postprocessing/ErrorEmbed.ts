@@ -1,5 +1,5 @@
 import { ButtonComponent } from 'obsidian';
-import styles from './ErrorEmbed.module.scss';
+import styles from './ErrorEmbed.module.css';
 import { GraphQLError } from 'graphql/error';
 import { ApolloError } from '@apollo/client/core';
 import { isArray } from '@apollo/client/utilities';

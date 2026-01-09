@@ -1,4 +1,4 @@
-import styles from './FileEmbed.module.scss';
+import styles from './FileEmbed.module.css';
 import { Settings, SettingsProvider } from '../settings';
 import { FileSnippet } from '../client/types';
 import { renderMarkdown } from '../utilities';
@@ -31,6 +31,10 @@ export class FileEmbed extends ExpandableEmbed {
 
 		if (prev?.wordWrap !== curr.wordWrap) {
 			this.applyStyles();	
+		}
+
+		if (prev?.showLineNumbers !== curr.showLineNumbers) {
+			this.onReload();
 		}
 	}
 
@@ -76,17 +80,55 @@ export class FileEmbed extends ExpandableEmbed {
 
 	protected createContent(container: Shard): void {
 		const { lang = '', snippetContent } = this.file;
-		const content = `\`\`\`${lang}\n${snippetContent}\n\`\`\``;
+		
+		const markdown = `\`\`\`${lang}\n${snippetContent}\n\`\`\``;
 		this.wrapper = container.createEl('div');
-		renderMarkdown(this.settings.app, content, this.wrapper, this);
+		renderMarkdown(this.settings.app, markdown, this.wrapper, this);
 		setTimeout(() => {
 			this.applyStyles();	
 		}, 0);
 	}
 
 	protected applyStyles() {
-		this.wrapper.classList = ''
-		this.wrapper.addClass(this.settings.settings.wordWrap ? styles.wordWrap : styles.noWordWrap)
+		this.wrapper.classList.value = '';
+		this.wrapper.classList.add(this.settings.settings.wordWrap ? styles.wordWrap : styles.noWordWrap);
+		
+		// Apply line numbers
+		const preElement = this.wrapper.querySelector('pre');
+		if (preElement) {
+			const codeElement = preElement.querySelector('code');
+			if (!codeElement) return;
+			
+			// Remove existing line numbers
+			const existingRows = preElement.querySelector('.line-numbers-rows');
+			if (existingRows) {
+				existingRows.remove();
+			}
+			
+			if (this.settings.settings.showLineNumbers) {
+				preElement.classList.add('line-numbers');
+				
+				// Create line numbers container
+				const rowsContainer = document.createElement('div');
+				rowsContainer.className = 'line-numbers-rows';
+				
+				// Count lines in code
+				const lines = codeElement.textContent?.split('\n') || [];
+				const startLine = this.file.lines?.start || 1;
+				
+				// Create spans for each line
+				lines.forEach((_, index) => {
+					const span = document.createElement('span');
+					span.textContent = (startLine + index).toString();
+					rowsContainer.appendChild(span);
+				});
+				
+				// Insert before code element
+				preElement.insertBefore(rowsContainer, codeElement);
+			} else {
+				preElement.classList.remove('line-numbers');
+			}
+		}
 	}
 
 	private tryToggle() {

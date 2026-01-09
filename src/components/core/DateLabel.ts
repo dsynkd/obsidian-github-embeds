@@ -1,6 +1,6 @@
 import { Shard } from './Shard';
 import { MomentInput } from 'moment';
-import styles from './DateLabel.module.scss';
+import styles from './DateLabel.module.css';
 import { moment } from 'obsidian';
 import { SettingsProvider } from '../../settings';
 

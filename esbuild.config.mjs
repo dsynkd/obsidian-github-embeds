@@ -2,7 +2,6 @@ import esbuild from 'esbuild';
 import process from 'process';
 import builtins from 'builtin-modules';
 import fs from 'fs';
-import {postcssModules, sassPlugin} from 'esbuild-sass-plugin';
 import path from 'path';
 
 const banner = `/*
@@ -19,18 +18,17 @@ const context = await esbuild.context({
 	},
 	entryPoints: ['src/main.ts'],
 	bundle: true,
+	loader: {
+		'.css': 'css',
+	},
 	plugins: [
-		sassPlugin({
-			transform: postcssModules({
-				hashPrefix: 'obsidian-github-embeds--',
-				localsConvention: 'camelCaseOnly',
-			}),
-		}),
 		{
 			name: 'main-css-to-styles-css',
 			setup: (build) =>
 				build.onEnd(() => {
-					fs.renameSync('main.css', 'styles.css');
+					if (fs.existsSync('main.css')) {
+						fs.renameSync('main.css', 'styles.css');
+					}
 				}),
 		},
 		{

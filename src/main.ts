@@ -6,7 +6,7 @@ import { FileUrl, IssueUrl } from './client/types';
 import { SettingsProvider } from './settings';
 import { FileEmbed } from './postprocessing/FileEmbed';
 import { LoadingEmbed } from './postprocessing/LoadingEmbed';
-import styles from './styles.scss';
+import './styles.css';
 import { EmbedContainer } from './postprocessing/EmbedContainer';
 import { Langs } from './utilities';
 
@@ -45,7 +45,7 @@ export default class GithubEmbedsPlugin extends SettingsProvider {
 			const urlLine = sourceSplit.find(line => line.trim().toLowerCase().startsWith('url:'));
 			const url = urlLine ? urlLine.split(':').slice(1).join(':').trim() : source;
 
-			const createContainer = () => new EmbedContainer(el.createEl('p', styles.embedContainer), ctx);
+			const createContainer = () => new EmbedContainer(el.createEl('p', { cls: 'embed-container' }), ctx);
 
 			let showHeading = this.settings.showHeading;
 			const showHeadingLine = sourceSplit.find(line => line.trim().startsWith('showHeading:'));

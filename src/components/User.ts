@@ -1,7 +1,7 @@
 import { UserFragment } from '../queries/fragments.graphql';
 import { SettingsProvider } from '../settings';
 import { Shard } from './core';
-import styles from './User.module.scss';
+import styles from './User.module.css';
 
 /**
  * A shard representing a GitHub user.

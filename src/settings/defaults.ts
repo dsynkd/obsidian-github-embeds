@@ -8,4 +8,5 @@ export const DefaultSettings: Settings = {
 	showTotalComments: true,
 	showHeading: true,
 	wordWrap: true,
+	showLineNumbers: true,
 };

@@ -75,5 +75,19 @@ export class FileSection extends BaseSection {
 				},
 				() => DefaultSettings.wordWrap,
 			);
+
+		new ResettableSetting(containerEl)
+			.setName('Show Line Numbers')
+			.setDesc('Show line numbers in code panels.')
+			.addResettableToggle(
+				(toggle) => {
+					toggle.setValue(plugin.settings.showLineNumbers).onChange(async (value) => {
+						await plugin.modifySettings((settings) => {
+							settings.showLineNumbers = value;
+						});
+					});
+				},
+				() => DefaultSettings.showLineNumbers,
+			);
 	}
 }

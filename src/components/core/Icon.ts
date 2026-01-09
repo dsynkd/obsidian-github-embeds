@@ -1,6 +1,6 @@
 import { Shard } from './Shard';
-import styles from './Icon.module.scss';
-import { Color, IconName, Icons } from '../../styles';
+import styles from './Icon.module.css';
+import { Color, IconName, Icons } from '../../styles/index';
 import { SettingsProvider } from '../../settings';
 
 /**

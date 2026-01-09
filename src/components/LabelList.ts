@@ -1,4 +1,4 @@
-import styles from './LabelList.module.scss';
+import styles from './LabelList.module.css';
 import { Label } from './Label';
 import { Shard } from './core';
 import { LabelConnectionFragment, LabelFragment } from '../queries/fragments.graphql';

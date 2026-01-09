@@ -1,4 +1,4 @@
-import styles from './LoadingEmbed.module.scss';
+import styles from './LoadingEmbed.module.css';
 import { EmbedComponent } from './EmbedComponent';
 
 export class LoadingEmbed extends EmbedComponent {

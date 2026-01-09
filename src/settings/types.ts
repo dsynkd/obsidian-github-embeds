@@ -6,6 +6,7 @@ export interface Settings {
 	readonly showTotalComments: boolean;
 	readonly showHeading: boolean;
 	readonly wordWrap: boolean;
+	readonly showLineNumbers: boolean;
 }
 
 export type DisplayLocation = 'preview' | 'inside' | 'none';

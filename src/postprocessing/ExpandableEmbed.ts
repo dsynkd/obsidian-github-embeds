@@ -1,5 +1,5 @@
 import { Settings, SettingsProvider } from '../settings';
-import styles from './ExpandableEmbed.module.scss';
+import styles from './ExpandableEmbed.module.css';
 import { EmbedComponent } from './EmbedComponent';
 import { Platform } from 'obsidian';
 import { Shard } from '../components/core';

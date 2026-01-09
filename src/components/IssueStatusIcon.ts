@@ -1,7 +1,7 @@
 import { Icon } from './core';
 import { IssueState, IssueStateReason } from '../generated/graphql.schema';
 import { SettingsProvider } from '../settings';
-import { Color, Colors, IconName } from '../styles';
+import { Color, Colors, IconName } from '../styles/index';
 
 /**
  * Icon class for GitHub issue states.

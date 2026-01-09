@@ -1,0 +1,129 @@
+.embed {
+	/* Expanded foldout mixin */
+	border-width: var(--border-width);
+	border-color: var(--background-modifier-border);
+	border-style: solid;
+	border-radius: var(--radius-s);
+	padding: var(--size-4-2) var(--size-4-3);
+	overflow: hidden;
+	min-width: 200px;
+	font-size: var(--font-text-size);
+	font-weight: var(--font-normal);
+	line-height: var(--line-height-normal);
+}
+
+.embed details > summary,
+.embed > summary {
+	cursor: default;
+}
+
+.embed details > summary > *,
+.embed > summary > * {
+	display: inline-block;
+}
+
+.embed details > summary:focus-visible,
+.embed > summary:focus-visible {
+	box-shadow: 0 0 0 3px var(--background-modifier-border-focus);
+}
+
+.embed[open] > summary .indicator {
+	transform: rotate(90deg);
+}
+
+.embed > summary {
+	list-style: none;
+}
+
+.embed > summary::marker {
+	content: '';
+	display: none;
+}
+
+.embed > summary::-webkit-details-marker {
+	display: none;
+}
+
+.embed > summary .indicator {
+	content: '▶︎' / '';
+	display: inline-block;
+	user-select: none;
+	height: min-content;
+	max-width: var(--font-ui-small);
+	font-size: var(--font-ui-small);
+	transition: transform 150ms ease-in-out;
+	transform-origin: center center;
+}
+
+.embed > summary .indicator:focus-visible {
+	color: var(--text-accent-hover);
+}
+
+.embed > summary .indicator:hover {
+	cursor: pointer;
+}
+
+.embed ~ .embed {
+	margin-top: var(--size-4-4);
+}
+
+.summary {
+	display: grid;
+	grid-template-areas:
+		'......... prefix'
+		'indicator heading'
+		'......... info';
+	grid-template-columns: min-content 1fr;
+	column-gap: var(--size-4-2);
+	align-items: center;
+}
+
+.summary a {
+	color: var(--text-faint);
+}
+
+.summary a:focus-visible {
+	color: var(--text-accent-hover);
+}
+
+.summary .indicator {
+	grid-area: indicator;
+}
+
+.summary .prefix {
+	grid-area: prefix;
+	color: var(--text-faint);
+	font-size: var(--font-smallest);
+}
+
+.summary .heading {
+	grid-area: heading;
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: var(--size-4-2);
+	margin: 0;
+	font-size: 1.35em;
+}
+
+.summary .info {
+	grid-area: info;
+	display: flex;
+	margin: var(--size-4-1) 0;
+	color: var(--text-faint);
+	font-size: var(--font-smaller);
+	gap: var(--size-4-3);
+	row-gap: var(--size-4-2);
+}
+
+.info {
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--size-4-2);
+}
+
+.hide {
+	display: none;
+}
+
+.content {
+}

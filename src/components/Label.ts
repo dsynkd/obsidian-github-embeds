@@ -1,4 +1,4 @@
-import styles from './Label.module.scss';
+import styles from './Label.module.css';
 import tinycolor from 'tinycolor2';
 import { Shard } from './core';
 import { SettingsProvider } from '../settings';

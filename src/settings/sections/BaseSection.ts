@@ -1,7 +1,7 @@
 import { App } from 'obsidian';
 import { GitHubEmbedsSettingsTab } from '../GitHubEmbedsSettingsTab';
 import GithubEmbedsPlugin from '../../main';
-import styles from './BaseSection.module.scss';
+import styles from './BaseSection.module.css';
 
 export abstract class BaseSection {
 	protected readonly app: App;

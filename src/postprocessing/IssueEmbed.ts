@@ -1,5 +1,5 @@
 import { sanitizeHTMLToDom } from 'obsidian';
-import styles from './IssueEmbed.module.scss';
+import styles from './IssueEmbed.module.css';
 import { ExpandableEmbed } from './ExpandableEmbed';
 import { IssueFragment, PullRequestFragment } from '../queries/Issue.graphql';
 import { Settings, SettingsProvider } from '../settings';

@@ -1,5 +1,5 @@
 import { Shard } from './Shard';
-import styles from './TextLabel.module.scss';
+import styles from './TextLabel.module.css';
 import { IconName } from '../../styles';
 import { SettingsProvider } from '../../settings';
 import { Icon } from './Icon';
