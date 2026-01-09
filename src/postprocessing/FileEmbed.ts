@@ -81,7 +81,7 @@ export class FileEmbed extends ExpandableEmbed {
 	protected createContent(container: Shard): void {
 		const { lang = '', snippetContent } = this.file;
 		
-		const markdown = `\`\`\`${lang}\n${snippetContent}\n\`\`\``;
+		const markdown = `\`\`\`${lang}\n${snippetContent.trimEnd()}\n\`\`\``;
 		this.wrapper = container.createEl('div');
 		renderMarkdown(this.settings.app, markdown, this.wrapper, this);
 		setTimeout(() => {
@@ -92,8 +92,10 @@ export class FileEmbed extends ExpandableEmbed {
 	protected applyStyles() {
 		this.wrapper.classList.value = '';
 		this.wrapper.classList.add(this.settings.settings.wordWrap ? styles.wordWrap : styles.noWordWrap);
-		
-		// Apply line numbers
+		this.applyLineNumbers()
+	}
+
+	private applyLineNumbers() {
 		const preElement = this.wrapper.querySelector('pre');
 		if (preElement) {
 			const codeElement = preElement.querySelector('code');
@@ -113,7 +115,7 @@ export class FileEmbed extends ExpandableEmbed {
 				rowsContainer.className = 'line-numbers-rows';
 				
 				// Count lines in code
-				const lines = codeElement.textContent?.split('\n') || [];
+				const lines = codeElement.textContent?.trimEnd().split('\n') || [];
 				const startLine = this.file.lines?.start || 1;
 				
 				// Create spans for each line
