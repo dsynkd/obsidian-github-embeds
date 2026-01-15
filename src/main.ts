@@ -6,7 +6,7 @@ import { FileUrl, IssueUrl } from './client/types';
 import { SettingsProvider } from './settings';
 import { FileEmbed } from './postprocessing/FileEmbed';
 import { LoadingEmbed } from './postprocessing/LoadingEmbed';
-import './styles.css';
+import './main.css';
 import { EmbedContainer } from './postprocessing/EmbedContainer';
 import { Langs } from './utilities';
 

@@ -1,0 +1,35 @@
+/* Prism.js line numbers styles */
+pre.line-numbers {
+	position: relative;
+	padding-left: 10px;
+	display: flex;
+}
+
+pre.line-numbers > code {
+	flex: 1;
+	white-space: inherit;
+}
+
+.line-numbers .line-numbers-rows {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	border-right: 1px solid var(--background-modifier-border);
+	margin-right: 0.8em;
+}
+
+.line-numbers-rows > span {
+	color: var(--text-muted);
+	font-family: var(--font-monospace);
+	font-size: var(--code-size);
+	line-height: var(--line-height-normal);
+	padding: 0 0.5em 0 0;
+	white-space: nowrap;
+}
+
+.embed-container {
+}
+
+.embed-container ~ .embed-container {
+	margin-top: var(--size-4-4);
+}
